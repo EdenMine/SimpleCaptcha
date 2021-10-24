@@ -1,0 +1,5 @@
+name: SimpleCaptcha
+main: me.overkidding.captcha.SimpleCaptcha
+version: 1.0
+author: overkidding
+website: www.edenmine.eu
