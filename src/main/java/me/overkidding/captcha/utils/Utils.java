@@ -43,7 +43,7 @@ public class Utils {
             materialList.set(randomNumber, chosen);
         }
 
-        System.out.println(materialList.size());
+        //System.out.println(materialList.size());
 
         Collections.shuffle(materialList);
 
