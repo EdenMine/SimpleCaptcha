@@ -2,6 +2,7 @@ package me.overkidding.captcha.utils;
 
 
 import me.overkidding.captcha.SimpleCaptcha;
+import me.overkidding.captcha.manager.CaptchaManager;
 import org.apache.commons.lang.time.DurationFormatUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -32,10 +33,10 @@ public class Utils {
             Material.BREWING_STAND, Material.CAULDRON
     );
 
-    public static List<Material> getRandomMaterials(Material chosen){
+    public static List<Material> getRandomMaterials(Material chosen, int inventorySize){
         List<Material> materialList = new ArrayList<>();
 
-        while(materialList.size() < 27){
+        while(materialList.size() < inventorySize){
             Material random = getRandomMaterial();
             while (materialList.contains(random)){
                 random = getRandomMaterial();
@@ -69,27 +70,34 @@ public class Utils {
         return DurationFormatUtils.formatDurationWords(input, true, true);
     }
 
-    public static void openInventory(Player player, Material item){
-
+    /**
+     *
+     * Open Inventory Method
+     *
+     * @param captchaManager Captcha Manager
+     * @param player Bukkit Entity
+     * @param item Chosen Item
+     *
+     **/
+    public static void openInventory(CaptchaManager captchaManager, Player player, Material item){
         new BukkitRunnable() {
             @Override
             public void run() {
-                Inventory inventory = Bukkit.createInventory(player, 27, ChatColor.DARK_RED + "Choose: " + item.name());
-                int x = 0;
-                List<Material> materials = Utils.getRandomMaterials(item);
-                for(int j = 0; j < 27; j++){
+                Inventory inventory = Bukkit.createInventory(player, captchaManager.getInventorySize(), ChatColor.translateAlternateColorCodes('&', captchaManager.getTitle().replace("%item%", item.name())));
+
+                List<Material> materials = Utils.getRandomMaterials(item, captchaManager.getInventorySize());
+                for(int j = 0; j < captchaManager.getInventorySize(); j++){
                     Material material = materials.get(j);
                     ItemStack stack = new ItemStack(material);
                     ItemMeta meta = stack.getItemMeta();
                     if(material == item){
-                        meta.setDisplayName(ChatColor.GREEN.toString() + ChatColor.BOLD + material.name());
+                        meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', captchaManager.getItemColor_Correct() + captchaManager.getItemDisplayName().replace("%item_name%", material.name())));
                     }else{
-                        meta.setDisplayName(ChatColor.RED.toString() + ChatColor.BOLD + material.name());
+                        meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', captchaManager.getItemColor_Wrong() + captchaManager.getItemDisplayName().replace("%item_name%", material.name())));
                     }
                     stack.setItemMeta(meta);
 
                     inventory.setItem(j, stack);
-                    //System.out.println(++x + ":" + material.name());
                 }
 
                 player.openInventory(inventory);

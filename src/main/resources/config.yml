@@ -1,0 +1,17 @@
+captcha:
+  # session in minutes
+  session: 15
+  # wrong attempts that players needs to get kicked (min: 1)
+  tries: 3
+  gui:
+    size: 27
+    item_display_name: "%item_name%" # %item_name% shows the Material Enum Name
+    correct_item_display_color: "&a&l"
+    wrong_item_display_color: "&c&l"
+    title: "&3Choose: %item%"
+  messages:
+    verified: "&aSuccessfully verified."
+    session-message: "&aYou have %time% until next verification"
+    wrong:
+      kick: "You inserted the wrong captcha item too many times."
+      message: "Wrong captcha. You have %tries% left."

@@ -17,6 +17,7 @@ public class SimpleCaptcha extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        saveDefaultConfig();
         instance = this;
 
         this.captchaManager = new CaptchaManager();
