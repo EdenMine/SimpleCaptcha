@@ -2,6 +2,7 @@ package me.overkidding.captcha.utils;
 
 
 import me.overkidding.captcha.SimpleCaptcha;
+import org.apache.commons.lang.time.DurationFormatUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -21,11 +22,15 @@ public class Utils {
             Material.CAKE_BLOCK,
             Material.PISTON_MOVING_PIECE, Material.PISTON_EXTENSION,
             Material.WATER, Material.STATIONARY_WATER,
-            Material.WOODEN_DOOR, Material.BIRCH_DOOR, Material.DARK_OAK_DOOR, Material.IRON_DOOR, Material.ACACIA_DOOR, Material.JUNGLE_DOOR, Material.SPRUCE_DOOR, Material.IRON_DOOR_BLOCK,
+
+            Material.WOODEN_DOOR, Material.BIRCH_DOOR, Material.DARK_OAK_DOOR, Material.IRON_DOOR,
+            Material.ACACIA_DOOR, Material.JUNGLE_DOOR, Material.SPRUCE_DOOR, Material.IRON_DOOR_BLOCK,
+
             Material.DAYLIGHT_DETECTOR_INVERTED, Material.DAYLIGHT_DETECTOR,
             Material.BED_BLOCK, Material.BED,
             Material.STANDING_BANNER, Material.WALL_BANNER,
-            Material.BREWING_STAND, Material.CAULDRON);
+            Material.BREWING_STAND, Material.CAULDRON
+    );
 
     public static List<Material> getRandomMaterials(Material chosen){
         List<Material> materialList = new ArrayList<>();
@@ -58,6 +63,10 @@ public class Utils {
             }
         }
         return materialList.get(new Random().nextInt(materialList.size() - 1));
+    }
+
+    public static String formatDuration(long input) {
+        return DurationFormatUtils.formatDurationWords(input, true, true);
     }
 
     public static void openInventory(Player player, Material item){

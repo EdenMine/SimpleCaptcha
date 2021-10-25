@@ -17,12 +17,14 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 public class CaptchaManager implements Listener {
 
     private final SimpleCaptcha plugin = SimpleCaptcha.getInstance();
     private final Map<UUID, Material> players = new HashMap<>();
     private final Map<UUID, Integer> tries = new HashMap<>();
+    private final Map<UUID, Long> sessions = new HashMap<>();
 
     public CaptchaManager(){
         Bukkit.getServer().getPluginManager().registerEvents(this, plugin);
@@ -32,10 +34,26 @@ public class CaptchaManager implements Listener {
     public void onLogin(PlayerJoinEvent event){
         Player player = event.getPlayer();
 
-        Material item = Utils.getRandomMaterial();
-        players.put(player.getUniqueId(), item);
+        long session = sessions.getOrDefault(player.getUniqueId(), -1L);
 
-        Utils.openInventory(player, item);
+        if(session == -1){
+            Material item = Utils.getRandomMaterial();
+            players.put(player.getUniqueId(), item);
+
+            Utils.openInventory(player, item);
+        }else{
+            long untilExpires = session - System.currentTimeMillis();
+            if(untilExpires <= 0){
+                sessions.remove(player.getUniqueId());
+
+                Material item = Utils.getRandomMaterial();
+                players.put(player.getUniqueId(), item);
+
+                Utils.openInventory(player, item);
+            }else{
+                player.sendMessage(ChatColor.GREEN + "You have " + Utils.formatDuration(untilExpires) + " until next verification.");
+            }
+        }
     }
 
     @EventHandler
@@ -60,9 +78,11 @@ public class CaptchaManager implements Listener {
                     player.closeInventory();
                 }
             }else{
-                player.sendMessage(ChatColor.GREEN + "Successfully verified.");
+                player.sendMessage(ChatColor.GREEN + "Successfully verified!");
+                player.sendMessage(ChatColor.DARK_GREEN + "You have 15 minutes until next verification.");
                 players.remove(player.getUniqueId());
                 tries.remove(player.getUniqueId());
+                sessions.put(player.getUniqueId(), System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(15));
                 player.closeInventory();
             }
         }
