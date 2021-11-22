@@ -69,11 +69,13 @@ public class CaptchaManager implements Listener {
         maxTries = plugin.getConfig().getInt("captcha.tries");
         sessionMinutes = plugin.getConfig().getInt("captcha.session");
 
+        if(getPlugin().isAuthMe()) Bukkit.getServer().getPluginManager().registerEvents(new AuthMeListener(), plugin);
         Bukkit.getServer().getPluginManager().registerEvents(this, plugin);
     }
 
     @EventHandler
     public void onLogin(PlayerJoinEvent event){
+        if(getPlugin().isAuthMe()) return;
         Player player = event.getPlayer();
 
         long session = sessions.getOrDefault(player.getUniqueId(), -1L);

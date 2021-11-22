@@ -15,10 +15,16 @@ public class SimpleCaptcha extends JavaPlugin {
 
     private CaptchaManager captchaManager;
 
+    private boolean isAuthMe;
+
     @Override
     public void onEnable() {
         saveDefaultConfig();
         instance = this;
+
+        isAuthMe = Bukkit.getPluginManager().getPlugin("AuthMe") != null;
+
+        if(isAuthMe) System.out.println("Registered AuthMe Hook");
 
         this.captchaManager = new CaptchaManager();
 
