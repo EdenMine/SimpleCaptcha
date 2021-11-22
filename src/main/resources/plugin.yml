@@ -1,6 +1,6 @@
 name: SimpleCaptcha
 main: me.overkidding.captcha.SimpleCaptcha
-version: 1.0.1
+version: 1.0.2
 author: overkidding
 website: www.edenmine.eu
 softdepend:
