@@ -75,7 +75,7 @@ public class CaptchaManager implements Listener {
 
     @EventHandler
     public void onLogin(PlayerJoinEvent event){
-        if(getPlugin().isAuthMe()) return;
+        if(getPlugin().isAuthMe() || event.getPlayer().hasPermission("simplecaptcha.bypass")) return;
         Player player = event.getPlayer();
 
         long session = sessions.getOrDefault(player.getUniqueId(), -1L);
@@ -122,7 +122,7 @@ public class CaptchaManager implements Listener {
                 }
             }else{
                 player.sendMessage(ChatColor.translateAlternateColorCodes('&', verifiedMessage));
-                player.sendMessage(ChatColor.translateAlternateColorCodes('&', sessionMessage.replace("%time%", "15 minutes")));
+                player.sendMessage(ChatColor.translateAlternateColorCodes('&', sessionMessage.replace("%time%", sessionMinutes + " minutes")));
                 players.remove(player.getUniqueId());
                 tries.remove(player.getUniqueId());
                 sessions.put(player.getUniqueId(), System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(sessionMinutes));

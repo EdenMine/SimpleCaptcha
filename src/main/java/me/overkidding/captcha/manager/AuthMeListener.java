@@ -14,6 +14,7 @@ public class AuthMeListener implements Listener {
     @EventHandler
     public void onAuthMeLogin(LoginEvent event){
         Player player = event.getPlayer();
+        if(event.getPlayer().hasPermission("simplecaptcha.bypass")) return;
 
         long session = SimpleCaptcha.getInstance().getCaptchaManager().getSessions().getOrDefault(player.getUniqueId(), -1L);
 
